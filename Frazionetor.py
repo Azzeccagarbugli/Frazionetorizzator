@@ -64,7 +64,7 @@ def handle(msg):
         bot.sendMessage(chat_id, insulto_str2)
 
 
-bot = telepot.Bot('307702349:AAExqlFD-IwaV9F1ZJXRAbGpuAIABO7wWgg')
+bot = telepot.Bot('TOKEN')
 bot.message_loop(handle)
 response = bot.getUpdates() #Ricevo info su utenti che usano il bot
 pprint(response)
