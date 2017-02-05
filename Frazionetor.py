@@ -85,6 +85,7 @@ def handle(msg):
 
     elif machine_state == 6 and content_type == 'text':
 
+<<<<<<< HEAD
         if command_input.isdigit() == True:
 
             denominatore = int(float(command_input))
@@ -110,6 +111,8 @@ def handle(msg):
             machine_state = 0
 
 
+=======
+>>>>>>> 4adedcf4a754da076a80f56019814a4b4c432733
 bot = telepot.Bot('TOKEN')
 bot.message_loop(handle)
 
