@@ -1,75 +1,119 @@
 import telepot
-import telepot.namedtuple
 import string
 import time
-import sys
 from fractions import Fraction
-from pprint import pprint
+
+machine_state = -1
+numeratore = 1
+denominatore = 1
 
 # Funzione che viene eseguita all'arrivo di ogni nuovo messaggio
 def handle(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
-    #m = telepot.namedtuple.Message(**msg)
+
+    global machine_state
+    global numeratore
+    global denominatore
 
     chat_id = msg['chat']['id']
     command_input = msg['text']
 
     print(content_type, chat_type, chat_id)
 
-    if command_input == '/help':
+    if machine_state == -1 and content_type == 'text':
 
-        help_text = '''Salve, puoi utilizzare il comando /frazionifica\
-                    per iniziare a semplificare le frazioni mentre puoi\
-                    usare il comando /cronologia per controllare la\
-                    cronologia dei tuoi calcoli.\
+        if command_input == '/start' or command_input == '/start@FrazionetorBot':
 
-                    Puoi contattare lo sviluppatore su github.com/Azzeccagarbugli'''
+            start_text = '''Benvenuto nel futuro! Inzia a digitare un comando per cominciare un'esperienza metafisica'''
+            bot.sendMessage(chat_id, start_text)
 
-        bot.sendMessage(chat_id, help_text)
+            machine_state = 0
 
-    elif command_input == '/frazionifica':
-        input_numeratore_str = 'Inserisci il numeratore della frazione'
-        ####
-        text_input_numeratore = msg['text'].lower()
-        number_presence_numeratore = text_input_numeratore.isdigit()
-        bot.sendMessage(chat_id, input_numeratore_str)
+    elif machine_state == 0 and content_type == 'text':
 
-        while number_presence_numeratore == False:
-            print(text_input_numeratore)
+        if command_input == '/help' or command_input == '/help@FrazionetorBot':
 
-            text_messaggeNUM_error = '''Stupido, devi inserire il numeratore non altre cose!\
-                                        Prova a usare quel piccolo cervello che ti ritrovi e inserisci un numeratore valido'''
+            help_text = "Salve, puoi utilizzare il comando /frazionifica per iniziare a semplificare"
+            help_text += "le frazioni mentre puoi usare il comando /cronologia per controllare la cronologia"
+            help_text += "dei tuoi calcoli.\nPuoi contattare lo sviluppatore su github.com/Azzeccagarbugli"
+            bot.sendMessage(chat_id, help_text)
 
-            bot.sendMessage(chat_id, text_messaggeNUM_error)
+            machine_state = 1
 
-            new_tentativo_numeratore = msg['text'].islower()
-            number_presence_numeratore_T2 = new_tentativo_numeratore.isdigit()
 
-            if number_presence_numeratore_T2 == False:
-                insulto_str = "Sei proprio un deficente."
-                bot.sendMessage(chat_id, insulto_str)
+    elif machine_state == 1 and content_type == 'text':
+
+        if command_input == '/frazionifica' or command_input == '/start@FrazionetorBot':
+
+            numerator_text = 'Inserisci il numeratore della frazione che vuoi semplificare'
+            bot.sendMessage(chat_id, numerator_text)
+
+            machine_state = 2
 
         else:
-            numeratore_CONCRETO = text_input_numeratore
-            numeratore_CONCRETO_str = "Il numeratore che hai inserito è: %s" % (numeratore_CONCRETO)
-            bot.sendMessage(chat_id, numeratore_CONCRETO_str)
+
+            problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficente forse?'''
+            bot.sendMessage(chat_id, problem_text)
+
+            machine_state = 0
+
+    elif machine_state == 2 and content_type == 'text':
+
+        if command_input.isdigit() == True:
+
+            numeratore = int(float(command_input))
+
+            denominatore_text = "Inserisci il denominatore della frazione che vuoi semplificare"
+            bot.sendMessage(chat_id, denominatore_text)
+
+            machine_state = 6
+
+        elif command_input.isdigit() == False:
+
+            numeratore_problem_text = "Quello che hai inserito non è un valore numerico! Inserisci un"
+            numeratore_problem_text += "numero o altrimenti premi la lettera 'q' per uscire dal comando /frazionifica"
+            bot.sendMessage(chat_id, numeratore_problem_text)
+
+            machine_state = 5
+
+        else:
+
+            problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficente forse?'''
+            bot.sendMessage(chat_id, problem_text)
+
+            machine_state = 0
+
+    elif machine_state == 6 and content_type == 'text':
+
+        if command_input.isdigit() == True:
+
+            denominatore = int(float(command_input))
+
+            frazione_sempl = Fraction(numeratore, denominatore)
+            bot.sendMessage(chat_id, ("La frazione semplificata è: *%s*" % frazione_sempl), parse_mode = "Markdown")
+
+            machine_state = 1
+
+        elif command_input.isdigit() == False:
+
+            numeratore_problem_text = "Quello che hai inserito non è un valore numerico! Inserisci un"
+            numeratore_problem_text += "numero o altrimenti premi la lettera 'q' per uscire dal comando /frazionifica"
+            bot.sendMessage(chat_id, numeratore_problem_text)
+
+            machine_state = 8
+
+        else:
+
+            problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficente forse?'''
+            bot.sendMessage(chat_id, problem_text)
+
+            machine_state = 0
 
 
-    elif command_input == '/cronologia':
-        insulto_str1 = "Sei proprio un deficente."
-        bot.sendMessage(chat_id, insulto_str1)
-
-    else:
-        insulto_str2 = "Sei proprio un deficente."
-        bot.sendMessage(chat_id, insulto_str2)
-
-
-bot = telepot.Bot('307702349:AAExqlFD-IwaV9F1ZJXRAbGpuAIABO7wWgg')
+bot = telepot.Bot('TOKEN')
 bot.message_loop(handle)
-response = bot.getUpdates() #Ricevo info su utenti che usano il bot
-pprint(response)
+
+print('Vediamo quello che succede ...')
 
 while 1:
     time.sleep(10)
-
-
