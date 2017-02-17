@@ -80,7 +80,7 @@ def handle(msg):
 
     elif machine_state == 1 and content_type == 'text':
 
-        if command_input == '/frazionifica' or command_input == '/start@FrazionetorBot':
+        if command_input == '/frazionifica' or command_input == '/frazionifica@FrazionetorBot':
 
             numerator_text = 'Inserisci il numeratore della frazione che vuoi semplificare'
             bot.sendMessage(chat_id, numerator_text)
