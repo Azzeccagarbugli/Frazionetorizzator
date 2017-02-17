@@ -1,10 +1,9 @@
 import telepot
-import string
 import time
-import sys
-from fractions import Fraction
+from fractions import gcd
 
 machine_state = -1
+
 
 class Frazione:
     numeratore = 1
@@ -16,33 +15,14 @@ class Frazione:
 
     # Funzione usata per semplificare le frazioni inserite dall'utente
     def Semplifica(self):
-        i = 1
+        gcd_val = gcd(self.numeratore, self.denominatore)
 
-        if self.numeratore > self.denominatore:
-            i = self.denominatore
-        else:
-            i = self.numeratore
+        self.numeratore = self.numeratore / gcd_val
+        self.denominatore = self.denominatore / gcd_val
 
-        while i > 0:
-            if self.numeratore % i == 0 and self.denominatore % i == 0:
-                self.numeratore = self.numeratore / i
-                self.denominatore = self.denominatore / i
+        frazione_sw = ("La frazione semplificata è: *{0}*/*{1}*".format(self.numeratore, self.denominatore))
+        return frazione_sw
 
-                if (self.numeratore != self.numeratore / i) and (self.denominatore != self.denominatore / i):
-
-                    frazione_sw = ("La frazione semplificata è: *{0}*/*{1}*".format(self.numeratore, self.denominatore))
-                    return frazione_sw
-                    print(frazione_sw)
-
-                else:
-
-                    frazione_sw = ("La frazione non può essere ridotta ai minimi termini: *{0}*/*{1}*".format(self.numeratore, self.denominatore))
-                    return frazione_sw
-                    print(frazione_sw)
-
-            break
-
-        i = i - 1
 
 # Funzione che viene eseguita all'arrivo di ogni nuovo messaggio
 def handle(msg):
