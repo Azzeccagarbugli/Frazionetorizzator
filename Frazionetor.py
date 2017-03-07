@@ -4,44 +4,29 @@ import time
 import sys
 from fractions import Fraction
 
-machine_state = -1
+machine_state = 0
 
-class Frazione:
-    numeratore = 1
-    denominatore = 1
+# Funzione usata per semplificare le frazioni inserite dall'utente
+def Semplifica(numeratore, denominatore):
+    i = 0
 
-    def __init__(self, numeratore, denominatore):
-        self.numeratore = int(numeratore)
-        self.denominatore = int(denominatore)
+    if numeratore > denominatore:
+        i = denominatore
+    else:
+        i = numeratore
 
-    # Funzione usata per semplificare le frazioni inserite dall'utente
-    def Semplifica(self):
-        i = 1
-
-        if self.numeratore > self.denominatore:
-            i = self.denominatore
-        else:
-            i = self.numeratore
-
-        while i > 0:
-            if self.numeratore % i == 0 and self.denominatore % i == 0:
-                self.numeratore = self.numeratore / i
-                self.denominatore = self.denominatore / i
-
-                if (self.numeratore != self.numeratore / i) and (self.denominatore != self.denominatore / i):
-
-                    frazione_sw = ("La frazione semplificata è: *{0}*/*{1}*".format(self.numeratore, self.denominatore))
-                    return frazione_sw
-                    print(frazione_sw)
-
-                else:
-
-                    frazione_sw = ("La frazione non può essere ridotta ai minimi termini: *{0}*/*{1}*".format(self.numeratore, self.denominatore))
-                    return frazione_sw
-                    print(frazione_sw)
-
-            break
-
+    while i > 0:
+        if numeratore % i == 0 and denominatore % i == 0:
+            numeratore = numeratore / i
+            denominatore = denominatore / i
+            if (numeratore != numeratore / i) and (denominatore != denominatore / i):
+                semplificazione = ("La frazione semplificata è: *{0}*/*{1}*".format(numeratore, denominatore))
+                return semplificazione
+                break
+            else:
+                n_semplificazione = ("La frazione non può essere ridotta ai minimi termini: *{0}*/*{1}*".format(numeratore, denominatore))
+                return n_semplificazione
+                break
         i = i - 1
 
 # Funzione che viene eseguita all'arrivo di ogni nuovo messaggio
@@ -57,16 +42,16 @@ def handle(msg):
 
     print(content_type, chat_type, chat_id)
 
-    if machine_state == -1 and content_type == 'text':
+    if machine_state == 0 and content_type == 'text':
 
         if command_input == '/start' or command_input == '/start@FrazionetorBot':
 
             start_text = '''Benvenuto nel futuro! Inzia a digitare un comando per cominciare un'esperienza metafisica'''
             bot.sendMessage(chat_id, start_text)
 
-            machine_state = 0
+            machine_state = 1
 
-    elif machine_state == 0 and content_type == 'text':
+    elif machine_state == 1 and content_type == 'text':
 
         if command_input == '/help' or command_input == '/help@FrazionetorBot':
 
@@ -75,35 +60,35 @@ def handle(msg):
             help_text += "dei tuoi calcoli.\nPuoi contattare lo sviluppatore su github.com/Azzeccagarbugli"
             bot.sendMessage(chat_id, help_text)
 
-            machine_state = 1
+            machine_state = 2
 
 
-    elif machine_state == 1 and content_type == 'text':
+    elif machine_state == 2 and content_type == 'text':
 
-        if command_input == '/frazionifica' or command_input == '/frazionifica@FrazionetorBot':
+        if command_input == '/frazionifica' or command_input == '/start@FrazionetorBot':
 
             numerator_text = 'Inserisci il numeratore della frazione che vuoi semplificare'
             bot.sendMessage(chat_id, numerator_text)
 
-            machine_state = 2
+            machine_state = 3
 
         else:
 
             problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficente forse?'''
             bot.sendMessage(chat_id, problem_text)
 
-            machine_state = 0
+            machine_state = 1
 
-    elif machine_state == 2 and content_type == 'text':
+    elif machine_state == 3 and content_type == 'text':
 
         if command_input.isdigit() == True:
 
-            numeratore = int(float(command_input))
+            numeratore = int(command_input)
 
             denominatore_text = "Inserisci il denominatore della frazione che vuoi semplificare"
             bot.sendMessage(chat_id, denominatore_text)
 
-            machine_state = 6
+            machine_state = 4
 
         elif command_input.isdigit() == False:
 
@@ -120,16 +105,14 @@ def handle(msg):
 
             machine_state = 0
 
-    elif machine_state == 6 and content_type == 'text':
+    elif machine_state == 4 and content_type == 'text':
 
         if command_input.isdigit() == True:
 
-            denominatore = int(float(command_input))
+            denominatore = int(command_input)
 
-            Fraz = Frazione(numeratore, denominatore)
-            msg = Fraz.Semplifica()
-            print(Fraz, msg, numeratore, denominatore)
-            bot.sendMessage(chat_id, ("%s" % msg), parse_mode = "Markdown")
+            semplificazione = Semplifica(numeratore, denominatore)
+            bot.sendMessage(chat_id, ("%s" % semplificazione), parse_mode = "Markdown")
 
             machine_state = 1
 
@@ -146,7 +129,7 @@ def handle(msg):
             problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficente forse?'''
             bot.sendMessage(chat_id, problem_text)
 
-            machine_state = 0
+            machine_state = 1
 
 bot = telepot.Bot('TOKEN')
 bot.message_loop(handle)
