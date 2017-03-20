@@ -1,8 +1,7 @@
 import telepot
-import string
-import time
 import sys
-from fractions import Fraction
+import time
+import datetime
 
 machine_state = 0
 
@@ -39,6 +38,8 @@ def handle(msg):
 
     chat_id = msg['chat']['id']
     command_input = msg['text']
+
+    history_frazionifica = []
 
     print(content_type, chat_type, chat_id)
 
@@ -107,7 +108,6 @@ def handle(msg):
         if command_input.isdigit() == True:
 
             denominatore = int(command_input)
-
             semplificazione = Semplifica(numeratore, denominatore)
             bot.sendMessage(chat_id, ("%s" % semplificazione), parse_mode = "Markdown")
 
