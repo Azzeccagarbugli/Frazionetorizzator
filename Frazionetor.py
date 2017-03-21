@@ -1,7 +1,8 @@
+from datetime import datetime
+from fractions import Fraction
 import telepot
 import sys
 import time
-import datetime
 
 machine_state = 0
 
@@ -63,12 +64,19 @@ def handle(msg):
 
             machine_state = 1
 
-        elif command_input == '/frazionifica' or command_input == '/start@FrazionetorBot':
+        elif command_input == '/frazionifica' or command_input == '/frazionifica@FrazionetorBot':
 
             numerator_text = 'Inserisci il numeratore della frazione che vuoi semplificare'
             bot.sendMessage(chat_id, numerator_text)
 
             machine_state = 2
+
+        elif command_input == '/cronologia' or command_input == '/cronologia@FrazionetorBot':
+
+            #numerator_text = 'Inserisci il numeratore della frazione che vuoi semplificare'
+            #bot.sendMessage(chat_id, numerator_text)
+
+            machine_state = 6
 
         else:
 
@@ -191,6 +199,15 @@ def handle(msg):
             bot.sendMessage(chat_id, problem_text)
 
             machine_state = 1
+
+    elif machine_state == 6 and content_type == 'text':
+
+        history_frazionifica = [str(numeratore), str(denominatore), str(Fraction(numeratore, denominatore)), str(datetime.now())]
+
+        #bot.sendMessage(chat_id, lol)
+
+        #print(history_frazionifica)
+
 
 
 bot = telepot.Bot('TOKEN')
