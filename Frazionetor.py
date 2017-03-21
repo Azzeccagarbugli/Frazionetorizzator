@@ -73,9 +73,10 @@ def handle(msg):
 
         elif command_input == '/cronologia' or command_input == '/cronologia@FrazionetorBot':
 
-            #numerator_text = 'Inserisci il numeratore della frazione che vuoi semplificare'
-            #bot.sendMessage(chat_id, numerator_text)
+            cronologia_text = 'Questi sono i tuoi calcoli più recenti:'
+            bot.sendMessage(chat_id, cronologia_text)
 
+            print("CAIONE")
             machine_state = 6
 
         else:
@@ -117,6 +118,8 @@ def handle(msg):
 
             denominatore = int(command_input)
             semplificazione = Semplifica(numeratore, denominatore)
+            history_frazionifica = [str(numeratore), str(denominatore), str(Fraction(numeratore, denominatore)), str(datetime.now())]
+            print(history_frazionifica)
             bot.sendMessage(chat_id, ("%s" % semplificazione), parse_mode = "Markdown")
 
             machine_state = 1
@@ -175,6 +178,7 @@ def handle(msg):
             denominatore = int(command_input)
             print(denominatore)
             semplificazione = Semplifica(numeratore, denominatore)
+            history_frazionifica = [str(numeratore), str(denominatore), str(Fraction(numeratore, denominatore)), str(datetime.now())]
             bot.sendMessage(chat_id, ("%s" % semplificazione), parse_mode = "Markdown")
 
             machine_state = 1
@@ -202,11 +206,17 @@ def handle(msg):
 
     elif machine_state == 6 and content_type == 'text':
 
-        history_frazionifica = [str(numeratore), str(denominatore), str(Fraction(numeratore, denominatore)), str(datetime.now())]
+        print("FAMMI CAPIRE")
+        print(len(history_frazionifica))
+        history_string = "Gli ultimi calcoli eseguiti sono i seguenti: \n"
+        history_string += "Data e ora: {0}\n"
+        history_string += "Frazione iniziale {1}/{2}\n"
+        history_string += "Frazione semplificata {3}".format(history_frazionifica[3], history_frazionifica[0], history_frazionifica[1], history_frazionifica[2])
 
-        #bot.sendMessage(chat_id, lol)
+        print(history_string)
+        bot.sendMessage(chat_id, history_string)
 
-        #print(history_frazionifica)
+        machine_state = 1
 
 
 
