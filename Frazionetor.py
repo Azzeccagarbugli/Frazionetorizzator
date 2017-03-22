@@ -1,3 +1,4 @@
+from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove, ForceReply
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import telepot
 import sys
@@ -57,8 +58,8 @@ def handle(msg):
         if command_input == '/help' or command_input == '/help@FrazionetorBot':
 
             help_text = "Salve, puoi utilizzare il comando /frazionifica per iniziare a semplificare"
-            help_text += "le frazioni mentre puoi usare il comando /frazionificastronger per ricevere informazioni molto"
-            help_text += "più dettagliate sulla frazione.\nPuoi contattare lo sviluppatore su github.com/Azzeccagarbugli"
+            help_text += "le frazioni mentre puoi usare il comando /frazionificastronger per ricevere informazioni molto "
+            help_text += "più dettagliate sull'ultima frazione semplificata.\nPuoi contattare lo sviluppatore su github.com/Azzeccagarbugli"
             bot.sendMessage(chat_id, help_text)
 
             machine_state = 1
@@ -69,6 +70,26 @@ def handle(msg):
             bot.sendMessage(chat_id, numerator_text)
 
             machine_state = 2
+
+        elif command_input == '/frazionificastronger' or command_input == '/frazionificastronger@FrazionetorBot':
+
+            fatt = 'Fattorizzazione'
+            appr_dec = 'Approsimazione decimale'
+            perc = 'Percentuale'
+            graf = 'Grafico a torta'
+
+            markup = ReplyKeyboardMarkup(keyboard=[
+                         [fatt],
+                         [appr_dec],
+                         [perc],
+                         [graf]
+                     ])
+
+            frazionifica_stronger_text = "Seleziona una voce per ottenere maggiori informazioni sull'ultima frazione semplificata"
+
+            bot.sendMessage(chat_id, frazionifica_stronger_text, reply_markup=markup)
+
+            machine_state = 6
 
         else:
 
@@ -205,9 +226,10 @@ def handle(msg):
 
     elif machine_state == 6:
 
-        bot.sendMessage(chat_id, history_string)
+            print(command_input)
 
-        machine_state = 1
+            machine_state = 1
+
 
 bot = telepot.Bot('TOKEN')
 bot.message_loop(handle)
