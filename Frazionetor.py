@@ -1,8 +1,11 @@
+from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import telepot
 import sys
 import time
+import wolframalpha
 
 machine_state = 0
+client = wolframalpha.Client("API")
 
 # Funzione usata per semplificare le frazioni inserite dall'utente
 def Semplifica(numeratore, denominatore):
@@ -54,8 +57,8 @@ def handle(msg):
         if command_input == '/help' or command_input == '/help@FrazionetorBot':
 
             help_text = "Salve, puoi utilizzare il comando /frazionifica per iniziare a semplificare"
-            help_text += "le frazioni mentre puoi usare il comando /cronologia per controllare la cronologia"
-            help_text += "dei tuoi calcoli.\nPuoi contattare lo sviluppatore su github.com/Azzeccagarbugli"
+            help_text += "le frazioni mentre puoi usare il comando /frazionificastronger per ricevere informazioni molto"
+            help_text += "più dettagliate sulla frazione.\nPuoi contattare lo sviluppatore su github.com/Azzeccagarbugli"
             bot.sendMessage(chat_id, help_text)
 
             machine_state = 1
@@ -107,7 +110,11 @@ def handle(msg):
             denominatore = int(command_input)
             semplificazione = Semplifica(numeratore, denominatore)
 
-            bot.sendMessage(chat_id, ("%s" % semplificazione), parse_mode = "Markdown")
+            keyboard = InlineKeyboardMarkup(inline_keyboard=[[
+                   InlineKeyboardButton(text='Stampa la semplificazione', url='google.it')
+               ]])
+
+            bot.sendMessage(chat_id, ("%s" % semplificazione), parse_mode = "Markdown", reply_markup = keyboard)
 
             machine_state = 1
 
