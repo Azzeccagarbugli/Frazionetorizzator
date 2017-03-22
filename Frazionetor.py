@@ -1,5 +1,3 @@
-from datetime import datetime
-from fractions import Fraction
 import telepot
 import sys
 import time
@@ -40,8 +38,6 @@ def handle(msg):
     chat_id = msg['chat']['id']
     command_input = msg['text']
 
-    history_frazionifica = []
-
     print(content_type, chat_type, chat_id)
 
     if machine_state == 0 and content_type == 'text':
@@ -70,14 +66,6 @@ def handle(msg):
             bot.sendMessage(chat_id, numerator_text)
 
             machine_state = 2
-
-        elif command_input == '/cronologia' or command_input == '/cronologia@FrazionetorBot':
-
-            cronologia_text = 'Questi sono i tuoi calcoli più recenti:'
-            bot.sendMessage(chat_id, cronologia_text)
-
-            print("CAIONE")
-            machine_state = 6
 
         else:
 
@@ -118,8 +106,7 @@ def handle(msg):
 
             denominatore = int(command_input)
             semplificazione = Semplifica(numeratore, denominatore)
-            history_frazionifica = [str(numeratore), str(denominatore), str(Fraction(numeratore, denominatore)), str(datetime.now())]
-            print(history_frazionifica)
+
             bot.sendMessage(chat_id, ("%s" % semplificazione), parse_mode = "Markdown")
 
             machine_state = 1
@@ -128,6 +115,7 @@ def handle(msg):
 
             denominatore_problem_text = "Quello che hai inserito non è un valore numerico! Inserisci un"
             denominatore_problem_text += " numero o altrimenti premi la lettera 'q' per uscire dal comando /frazionifica"
+
             bot.sendMessage(chat_id, denominatore_problem_text)
 
             machine_state = 5
@@ -135,6 +123,7 @@ def handle(msg):
         else:
 
             problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficente forse?'''
+
             bot.sendMessage(chat_id, problem_text)
 
             machine_state = 1
@@ -144,8 +133,8 @@ def handle(msg):
         if command_input.isdigit() == True:
 
             numeratore = int(command_input)
-            print(numeratore)
             denominatore_text = "Inserisci il denominatore della frazione che vuoi semplificare"
+
             bot.sendMessage(chat_id, denominatore_text)
 
             machine_state = 3
@@ -160,6 +149,7 @@ def handle(msg):
 
             numeratore_problem_text = "Quello che hai inserito non è un valore numerico! Inserisci un"
             numeratore_problem_text += " numero o altrimenti premi la lettera 'q' per uscire dal comando /frazionifica"
+
             bot.sendMessage(chat_id, numeratore_problem_text)
 
             machine_state = 4
@@ -167,6 +157,7 @@ def handle(msg):
         else:
 
             problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficente forse?'''
+
             bot.sendMessage(chat_id, problem_text)
 
             machine_state = 1
@@ -176,9 +167,8 @@ def handle(msg):
         if command_input.isdigit() == True:
 
             denominatore = int(command_input)
-            print(denominatore)
             semplificazione = Semplifica(numeratore, denominatore)
-            history_frazionifica = [str(numeratore), str(denominatore), str(Fraction(numeratore, denominatore)), str(datetime.now())]
+
             bot.sendMessage(chat_id, ("%s" % semplificazione), parse_mode = "Markdown")
 
             machine_state = 1
@@ -193,6 +183,7 @@ def handle(msg):
 
             denominatore_problem_text = "Quello che hai inserito non è un valore numerico! Inserisci un"
             denominatore_problem_text += " numero o altrimenti premi la lettera 'q' per uscire dal comando /frazionifica"
+
             bot.sendMessage(chat_id, denominatore_problem_text)
 
             machine_state = 5
@@ -200,25 +191,16 @@ def handle(msg):
         else:
 
             problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficente forse?'''
+
             bot.sendMessage(chat_id, problem_text)
 
             machine_state = 1
 
-    elif machine_state == 6 and content_type == 'text':
+    elif machine_state == 6:
 
-        print("FAMMI CAPIRE")
-        print(len(history_frazionifica))
-        history_string = "Gli ultimi calcoli eseguiti sono i seguenti: \n"
-        history_string += "Data e ora: {0}\n"
-        history_string += "Frazione iniziale {1}/{2}\n"
-        history_string += "Frazione semplificata {3}".format(history_frazionifica[3], history_frazionifica[0], history_frazionifica[1], history_frazionifica[2])
-
-        print(history_string)
         bot.sendMessage(chat_id, history_string)
 
         machine_state = 1
-
-
 
 bot = telepot.Bot('TOKEN')
 bot.message_loop(handle)
