@@ -39,6 +39,11 @@ def handle(msg):
     global numeratore
     global denominatore
 
+    fatt = 'Fattorizzazione'
+    appr_dec = 'Approsimazione decimale'
+    perc = 'Percentuale'
+    graf = 'Grafico a torta'
+
     chat_id = msg['chat']['id']
     command_input = msg['text']
 
@@ -49,6 +54,7 @@ def handle(msg):
         if command_input == '/start' or command_input == '/start@FrazionetorBot':
 
             start_text = '''Benvenuto nel futuro! Inzia a digitare un comando per cominciare un'esperienza metafisica'''
+
             bot.sendMessage(chat_id, start_text)
 
             machine_state = 1
@@ -60,6 +66,7 @@ def handle(msg):
             help_text = "Salve, puoi utilizzare il comando /frazionifica per iniziare a semplificare"
             help_text += "le frazioni mentre puoi usare il comando /frazionificastronger per ricevere informazioni molto "
             help_text += "più dettagliate sull'ultima frazione semplificata.\nPuoi contattare lo sviluppatore su github.com/Azzeccagarbugli"
+
             bot.sendMessage(chat_id, help_text)
 
             machine_state = 1
@@ -67,16 +74,12 @@ def handle(msg):
         elif command_input == '/frazionifica' or command_input == '/frazionifica@FrazionetorBot':
 
             numerator_text = 'Inserisci il numeratore della frazione che vuoi semplificare'
+
             bot.sendMessage(chat_id, numerator_text)
 
             machine_state = 2
 
         elif command_input == '/frazionificastronger' or command_input == '/frazionificastronger@FrazionetorBot':
-
-            fatt = 'Fattorizzazione'
-            appr_dec = 'Approsimazione decimale'
-            perc = 'Percentuale'
-            graf = 'Grafico a torta'
 
             markup = ReplyKeyboardMarkup(keyboard=[
                          [fatt],
@@ -103,8 +106,8 @@ def handle(msg):
         if command_input.isdigit() == True:
 
             numeratore = int(command_input)
-
             denominatore_text = "Inserisci il denominatore della frazione che vuoi semplificare"
+
             bot.sendMessage(chat_id, denominatore_text)
 
             machine_state = 3
@@ -113,6 +116,7 @@ def handle(msg):
 
             numeratore_problem_text = "Quello che hai inserito non è un valore numerico! Inserisci un "
             numeratore_problem_text += " numero o altrimenti premi la lettera 'q' per uscire dal comando /frazionifica"
+
             bot.sendMessage(chat_id, numeratore_problem_text)
 
             machine_state = 4
@@ -120,6 +124,7 @@ def handle(msg):
         else:
 
             problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficente forse?'''
+
             bot.sendMessage(chat_id, problem_text)
 
             machine_state = 1
@@ -227,6 +232,16 @@ def handle(msg):
     elif machine_state == 6:
 
             print(command_input)
+
+            res = client.query(str(numeratore) + '/' + str(denominatore))
+
+            if command_input == fatt and content_type == 'text':
+
+                aristotele_value = next(res.Result.PrimeFactorization).text
+
+                bot.sendMessage(chat_id, aristotele_value)
+
+                machine_state = 1
 
             machine_state = 1
 
