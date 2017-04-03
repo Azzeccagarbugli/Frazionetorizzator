@@ -136,8 +136,10 @@ def handle(msg):
             denominatore = int(command_input)
             semplificazione = Semplifica(numeratore, denominatore)
 
+            url_frazione = 'http://www.wolframalpha.com/input/?i={0}%2F{1}'.format(numeratore, denominatore)
+
             keyboard = InlineKeyboardMarkup(inline_keyboard=[[
-                   InlineKeyboardButton(text='Stampa la semplificazione', url='google.it')
+                   InlineKeyboardButton(text='Maggiori dettagli', url=url_frazione)
                ]])
 
             bot.sendMessage(chat_id, ("%s" % semplificazione), parse_mode = "Markdown", reply_markup = keyboard)
