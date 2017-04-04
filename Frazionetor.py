@@ -249,12 +249,13 @@ def handle(msg):
                     try:
                         found_fatt = re.findall(pattern_fatt, str(pod))
                         found_fatt_final = re.findall(pattern_fatt_final, str(found_fatt))
-                        print(found_fatt_final)
+                        if len(found_fatt_final):
+                            break
                         #found_fatt_very_final = re.findall(pattern_fatt_very_final, str(found_fatt_final))
                     except AttributeError:
                         found_fatt = ''
 
-                bot.sendMessage(chat_id, str(found_fatt_final))
+                bot.sendMessage(chat_id, found_fatt_final[0])
 
                 machine_state = 1
 
