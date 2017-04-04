@@ -4,6 +4,7 @@ import telepot
 import sys
 import time
 import wolframalpha
+import re
 
 machine_state = 0
 client = wolframalpha.Client("API")
