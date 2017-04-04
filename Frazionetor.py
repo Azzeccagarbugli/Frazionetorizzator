@@ -234,20 +234,29 @@ def handle(msg):
 
     elif machine_state == 6:
 
-            print(command_input)
-
-            res = client.query(str(numeratore) + '/' + str(denominatore))
-
             if command_input == fatt and content_type == 'text':
 
-                aristotele_value = next(res.Result.PrimeFactorization).text
+                pattern_fatt = '\'@title\': \'Prime factorization\'(.+)'
+                pattern_fatt_final = '\'plaintext\': \'(.+)\''
+                #pattern_fatt_very_final = '\'(.+)\''
 
-                bot.sendMessage(chat_id, aristotele_value)
+                found_fatt = ''
+                found_fatt_final = ''
+
+                res = client.query(str(numeratore) + '/' + str(denominatore))
+
+                for pod in res.pods:
+                    try:
+                        found_fatt = re.findall(pattern_fatt, str(pod))
+                        found_fatt_final = re.findall(pattern_fatt_final, str(found_fatt))
+                        print(found_fatt_final)
+                        #found_fatt_very_final = re.findall(pattern_fatt_very_final, str(found_fatt_final))
+                    except AttributeError:
+                        found_fatt = ''
+
+                bot.sendMessage(chat_id, str(found_fatt_final))
 
                 machine_state = 1
-
-            machine_state = 1
-
 
 bot = telepot.Bot('TOKEN')
 bot.message_loop(handle)
