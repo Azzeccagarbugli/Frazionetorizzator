@@ -234,30 +234,50 @@ def handle(msg):
 
     elif machine_state == 6:
 
-            if command_input == fatt and content_type == 'text':
+        res = client.query(str(numeratore) + '/' + str(denominatore))
 
-                pattern_fatt = '\'@title\': \'Prime factorization\'(.+)'
-                pattern_fatt_final = '\'plaintext\': \'(.+)\''
-                #pattern_fatt_very_final = '\'(.+)\''
+        if command_input == fatt and content_type == 'text':
 
-                found_fatt = ''
-                found_fatt_final = ''
+            pattern_fatt = '\'@title\': \'Prime factorization\'(.+)'
+            pattern_fatt_final = '\'plaintext\': \'(.+)\''
 
-                res = client.query(str(numeratore) + '/' + str(denominatore))
+            found_fatt = ''
+            found_fatt_final = ''
 
-                for pod in res.pods:
-                    try:
-                        found_fatt = re.findall(pattern_fatt, str(pod))
-                        found_fatt_final = re.findall(pattern_fatt_final, str(found_fatt))
-                        if len(found_fatt_final):
-                            break
-                        #found_fatt_very_final = re.findall(pattern_fatt_very_final, str(found_fatt_final))
-                    except AttributeError:
-                        found_fatt = ''
+            for pod in res.pods:
+                try:
+                    found_fatt = re.findall(pattern_fatt, str(pod))
+                    found_fatt_final = re.findall(pattern_fatt_final, str(found_fatt))
+                    if len(found_fatt_final):
+                        break
+                except AttributeError:
+                    found_fatt = ''
 
-                bot.sendMessage(chat_id, found_fatt_final[0])
+            bot.sendMessage(chat_id, found_fatt_final[0])
 
-                machine_state = 1
+            machine_state = 1
+
+        elif command_input == appr_dec and content_type == 'text':
+
+            pattern_appr = '\'@title\': \'Decimal approximation\'(.+)'
+            pattern_appr_final = '\'plaintext\': \'(.+?)\''
+
+            found_appr = ''
+            found_appr_final = ''
+
+            for pod in res.pods:
+                try:
+                    found_appr = re.findall(pattern_appr, str(pod))
+                    found_appr_final = re.findall(pattern_appr_final, str(found_appr))
+                    if len(found_appr_final):
+                        break
+                except AttributeError:
+                    found_appr = ''
+
+            bot.sendMessage(chat_id, found_appr_final[0])
+
+            machine_state = 1
+
 
 bot = telepot.Bot('TOKEN')
 bot.message_loop(handle)
