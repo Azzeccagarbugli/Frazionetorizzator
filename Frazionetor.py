@@ -42,7 +42,7 @@ def handle(msg):
 
     fatt = 'Fattorizzazione'
     appr_dec = 'Approsimazione decimale'
-    perc = 'Percentuale'
+    egiz = 'Frazione egizia'
     graf = 'Grafico a torta'
 
     chat_id = msg['chat']['id']
@@ -85,7 +85,7 @@ def handle(msg):
             markup = ReplyKeyboardMarkup(keyboard=[
                          [fatt],
                          [appr_dec],
-                         [perc],
+                         [egiz],
                          [graf]
                      ])
 
@@ -278,6 +278,26 @@ def handle(msg):
 
             machine_state = 1
 
+        elif command_input == egiz and content_type == 'text':
+
+            pattern_egiz = '\'@title\': \'Egyptian fraction expansion\'(.+)'
+            pattern_egiz_final = '\'plaintext\': \'(.+?)\''
+
+            found_egiz = ''
+            found_egiz_final = ''
+
+            for pod in res.pods:
+                try:
+                    found_egiz = re.findall(pattern_egiz, str(pod))
+                    found_egiz_final = re.findall(pattern_egiz_final, str(found_egiz))
+                    if len(found_egiz_final):
+                        break
+                except AttributeError:
+                    found_egiz = ''
+
+            bot.sendMessage(chat_id, found_egiz_final[0])
+
+            machine_state = 1
 
 bot = telepot.Bot('TOKEN')
 bot.message_loop(handle)
