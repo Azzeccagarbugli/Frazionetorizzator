@@ -308,6 +308,33 @@ def handle(msg):
 
             machine_state = 1
 
+        elif command_input == graf and content_type == 'text':
+
+            pattern_piechart = '\'@title\': \'Pie chart\'(.+)'
+            pattern_piechart_inter = '\'img\': {(.+)}'
+            pattern_piechart_final = '\'@src\': \'(.+?)\''
+
+            found_piechart = ''
+            found_piechart_inter = ''
+            found_piechart_final = ''
+
+            for pod in res.pods:
+                try:
+                    found_piechart = re.findall(pattern_piechart, str(pod))
+                    found_piechart_inter = re.findall(pattern_piechart_inter, str(found_piechart))
+                    found_piechart_final = re.findall(pattern_piechart_final, str(found_piechart_inter))
+                    if len(found_piechart_final):
+                        found_piechart_final = found_piechart_final[0]
+                        break
+                    else:
+                        found_piechart_final = 'Modalità non disponibile in questo caso'
+                except IndexError:
+                    found_piechart_final = ''
+
+            bot.sendPhoto(chat_id, found_piechart_final)
+
+            machine_state = 1
+
 bot = telepot.Bot('TOKEN')
 bot.message_loop(handle)
 
