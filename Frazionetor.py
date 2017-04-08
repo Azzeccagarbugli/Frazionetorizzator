@@ -249,11 +249,14 @@ def handle(msg):
                     found_fatt = re.findall(pattern_fatt, str(pod))
                     found_fatt_final = re.findall(pattern_fatt_final, str(found_fatt))
                     if len(found_fatt_final):
+                        found_fatt_final = found_fatt_final[0]
                         break
-                except AttributeError:
-                    found_fatt = ''
+                    else:
+                        found_fatt_final = 'Modalità non disponibile in questo caso'
+                except IndexError:
+                    found_fatt_final = ''
 
-            bot.sendMessage(chat_id, found_fatt_final[0])
+            bot.sendMessage(chat_id, found_fatt_final)
 
             machine_state = 1
 
@@ -270,11 +273,14 @@ def handle(msg):
                     found_appr = re.findall(pattern_appr, str(pod))
                     found_appr_final = re.findall(pattern_appr_final, str(found_appr))
                     if len(found_appr_final):
+                        found_appr_final = found_appr_final[0]
                         break
-                except AttributeError:
-                    found_appr = ''
+                    else:
+                        found_appr_final = 'Modalità non disponibile in questo caso'
+                except IndexError:
+                    found_appr_final = ''
 
-            bot.sendMessage(chat_id, found_appr_final[0])
+            bot.sendMessage(chat_id, found_appr_final)
 
             machine_state = 1
 
@@ -291,11 +297,14 @@ def handle(msg):
                     found_egiz = re.findall(pattern_egiz, str(pod))
                     found_egiz_final = re.findall(pattern_egiz_final, str(found_egiz))
                     if len(found_egiz_final):
+                        found_egiz_final = found_egiz_final[0]
                         break
-                except AttributeError:
-                    found_egiz = ''
+                    else:
+                        found_egiz_final = 'Modalità non disponibile in questo caso'
+                except IndexError:
+                    found_egiz_final = ''
 
-            bot.sendMessage(chat_id, found_egiz_final[0])
+            bot.sendMessage(chat_id, found_egiz_final)
 
             machine_state = 1
 
