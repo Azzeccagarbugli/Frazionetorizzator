@@ -1,5 +1,6 @@
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove, ForceReply
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
+from fractions import gcd
 import telepot
 import sys
 import time
@@ -137,10 +138,10 @@ def handle(msg):
             denominatore = int(command_input)
             semplificazione = Semplifica(numeratore, denominatore)
 
-            url_frazione = 'http://www.wolframalpha.com/input/?i={0}%2F{1}'.format(numeratore, denominatore)
+            # url_frazione = 'http://www.wolframalpha.com/input/?i={0}%2F{1}'.format(numeratore, denominatore)
 
             keyboard = InlineKeyboardMarkup(inline_keyboard=[[
-                   InlineKeyboardButton(text='Maggiori dettagli', url=url_frazione)
+                   InlineKeyboardButton(text='Massimo comun divisore', callback_data='notification')
                ]])
 
             bot.sendMessage(chat_id, ("%s" % semplificazione), parse_mode = "Markdown", reply_markup = keyboard)
@@ -335,8 +336,18 @@ def handle(msg):
 
             machine_state = 1
 
+def on_callback_query(msg):
+    query_id, from_id, data = telepot.glance(msg, flavor='callback_query')
+    print('Callback query:', query_id, from_id, data)
+
+    gcd = 'Il massimo comun divisore è: {0}'.format()
+
+    if data == 'notification':
+        bot.answerCallbackQuery(query_id, text=gcd)
+
 bot = telepot.Bot('TOKEN')
-bot.message_loop(handle)
+bot.message_loop({'chat': handle,
+                  'callback_query': on_callback_query})
 
 print('Vediamo quello che succede ...')
 
