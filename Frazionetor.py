@@ -7,8 +7,10 @@ import time
 import wolframalpha
 import re
 
-machine_state = 0
 client = wolframalpha.Client("API")
+
+machine_state = 0
+massimo_comun_divisore = 0
 
 # Funzione usata per semplificare le frazioni inserite dall'utente
 def Semplifica(numeratore, denominatore):
@@ -40,6 +42,8 @@ def handle(msg):
     global machine_state
     global numeratore
     global denominatore
+
+    global massimo_comun_divisore
 
     fatt = 'Fattorizzazione'
     appr_dec = 'Approsimazione decimale'
@@ -136,9 +140,11 @@ def handle(msg):
         if command_input.isdigit() == True:
 
             denominatore = int(command_input)
-            semplificazione = Semplifica(numeratore, denominatore)
 
-            # url_frazione = 'http://www.wolframalpha.com/input/?i={0}%2F{1}'.format(numeratore, denominatore)
+            massimo_comun_divisore = gcd(int(numeratore), int(denominatore))
+            print(massimo_comun_divisore)
+
+            semplificazione = Semplifica(numeratore, denominatore)
 
             keyboard = InlineKeyboardMarkup(inline_keyboard=[[
                    InlineKeyboardButton(text='Massimo comun divisore', callback_data='notification')
@@ -205,6 +211,8 @@ def handle(msg):
 
             denominatore = int(command_input)
             semplificazione = Semplifica(numeratore, denominatore)
+
+            massimo_comun_divisore = gcd(int(numeratore), int(denominatore))
 
             bot.sendMessage(chat_id, ("%s" % semplificazione), parse_mode = "Markdown")
 
@@ -340,10 +348,12 @@ def on_callback_query(msg):
     query_id, from_id, data = telepot.glance(msg, flavor='callback_query')
     print('Callback query:', query_id, from_id, data)
 
-    gcd = 'Il massimo comun divisore è: {0}'.format()
+    global massimo_comun_divisore
+
+    text_massimo_comun_divisore = 'Il massimo comun divisore è: {0}'.format(massimo_comun_divisore)
 
     if data == 'notification':
-        bot.answerCallbackQuery(query_id, text=gcd)
+        bot.answerCallbackQuery(query_id, text=text_massimo_comun_divisore)
 
 bot = telepot.Bot('TOKEN')
 bot.message_loop({'chat': handle,
