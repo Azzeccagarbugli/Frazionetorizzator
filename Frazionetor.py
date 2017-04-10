@@ -102,7 +102,7 @@ def handle(msg):
 
         else:
 
-            problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficente forse?'''
+            problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficiente forse?'''
             bot.sendMessage(chat_id, problem_text)
 
             machine_state = 1
@@ -129,7 +129,7 @@ def handle(msg):
 
         else:
 
-            problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficente forse?'''
+            problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficiente forse?'''
 
             bot.sendMessage(chat_id, problem_text)
 
@@ -165,7 +165,7 @@ def handle(msg):
 
         else:
 
-            problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficente forse?'''
+            problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficiente forse?'''
 
             bot.sendMessage(chat_id, problem_text)
 
@@ -199,7 +199,7 @@ def handle(msg):
 
         else:
 
-            problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficente forse?'''
+            problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficiente forse?'''
 
             bot.sendMessage(chat_id, problem_text)
 
@@ -235,7 +235,7 @@ def handle(msg):
 
         else:
 
-            problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficente forse?'''
+            problem_text = '''Cosa cavolo sono queste cose?! Mi stai prendendo per un deficiente forse?'''
 
             bot.sendMessage(chat_id, problem_text)
 
